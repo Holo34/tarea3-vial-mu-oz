@@ -54,11 +54,13 @@ cuenta registro_cuentas::obtener(string rol){
     int i=0;
     while (tabla[p(rol,i)].rol != rol && i<16){
         
-        cout<<"OBTAINING"<<endl;
-        cout<<p(rol,i)<<endl;
+        //cout<<"OBTAINING"<<endl;
+        //cout<<p(rol,i)<<endl;
         i++;
     }
     if (i<16){
+        cout<<tabla[p(rol,i)].nombre<<endl;
+        cout<<tabla[p(rol,i)].descripcion<<endl;
         return  tabla[p(rol,i)];
     }
     else{
@@ -72,16 +74,19 @@ void registro_cuentas::agregar(cuenta c){
     int rolNum= stoi(rolStr.erase(8,1));
     int k=hash(c.rol);
     int i=0;
+    bool flag=false;
     while (tabla[k].rol!=""){
-        cout<<"ADDING, is this empty?"<<endl;
-        cout<<tabla[k].rol<<endl;
+        //cout<<"ADDING, is this empty?"<<endl;
+        //cout<<tabla[k].rol<<endl;
+        if (tabla[k].rol==c.rol){
+            cout<<"Rol" <<c.rol<<"ya existente"<<endl;
+            flag=true;
+        }
         i++;
-        k+=p(c.rol,i);
+        k = (hash(c.rol) + p(c.rol, i)) % ranuras;
     }
-    if (tabla[k].rol==c.rol){
-        cout<<"Rol ya existente"<<endl;
-    }
-    else{
+    if (flag==false){
+        cout<<k<<"determined to be empty, now adding"<<c.rol<<endl;
         tabla[k]=c;
     }
     
@@ -94,18 +99,18 @@ void registro_cuentas::eliminar(string rol){
         //cout<<p(rol,i)<<endl;
         i++;
     }
-    cout<<"liberating rol"<<endl;
+    //cout<<"liberating rol"<<endl;
     tabla[p(rol,i)].rol="liberado";
-    cout<<"rol is now"<<tabla[p(rol,i)].rol<<endl;
+    //cout<<"rol is now"<<tabla[p(rol,i)].rol<<endl;
 
 
-    cout<<"liberating nombre"<<endl;
+    //cout<<"liberating nombre"<<endl;
     tabla[p(rol,i)].nombre="liberado";
-    cout<<"name is now"<<tabla[p(rol,i)].nombre<<endl;
+    //cout<<"name is now"<<tabla[p(rol,i)].nombre<<endl;
 
-    cout<<"liberating description"<<endl;
+    //cout<<"liberating description"<<endl;
     tabla[p(rol,i)].descripcion="liberado";
-    cout<<"description is now"<<tabla[p(rol,i)].descripcion<<endl;
+    //cout<<"description is now"<<tabla[p(rol,i)].descripcion<<endl;
 }
 
 void registro_cuentas::modificar(string rol, string descripcion){
@@ -120,29 +125,3 @@ void registro_cuentas::modificar(string rol, string descripcion){
 
 }
 
-//Main************************************************************************************************
-int main(){
-
-    registro_cuentas rc;
-    cuenta c1 = {"16161616-6", "John Doe", "Description"};
-    cuenta c2 = {"17171717-7", "Jane Doess", "Another Description"};
-    cout<<"running agragar"<<endl;
-    rc.agregar(c1);
-    cout<<"running obtener rol, name, desc"<<endl;
-    cout<<rc.obtener("16161616-6").rol;
-    cout<<rc.obtener("16161616-6").nombre;
-    cout<<rc.obtener("16161616-6").descripcion;
-    cout<<endl<<"running modificar"<<endl;
-    rc.modificar("16161616-6", "Ha sido modificado la descripción");
-    cout<<"running obtener moded desc"<<endl;
-    cout<<rc.obtener("16161616-6").descripcion;
-    cout<<"running eliminar"<<endl;
-    rc.eliminar("16161616-6");
-    cout<<"running obtener deleted rol name desc"<<endl;
-    cout<<rc.obtener("16161616-6").rol;
-    cout<<rc.obtener("16161616-6").nombre;
-    cout<<rc.obtener("16161616-6").descripcion;
-    
-    
-    return 0;
-}
