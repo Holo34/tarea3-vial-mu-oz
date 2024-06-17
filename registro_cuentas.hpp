@@ -1,6 +1,8 @@
-#include <iostream>
-#include <fstream>
-#include <string>
+#ifndef REGISTRO_CUENTAS_HPP
+#define REGISTRO_CUENTAS_HPP
+
+#include "funciones_extra.hpp"
+
 using namespace std;
 
 struct cuenta {
