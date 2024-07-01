@@ -26,23 +26,24 @@ int main () {
         string* arrComando = separar_string(lineaActual,' ');
 
         if (arrComando[0]=="AGREGAR"){
-            agregar(arrComando[1],arrComando[2],arrComando[3], registro);
+            cuenta nueva_cuenta; nueva_cuenta.rol = arrComando[1]; nueva_cuenta.nombre = arrComando[2]; nueva_cuenta.descripcion = arrComando[3];
+            registro.agregar(nueva_cuenta);
         }
 
         if (arrComando[0]=="QUITAR"){
-            quitar(arrComando[1],registro);
+            registro.eliminar(arrComando[1]);
         }
 
         if (arrComando[0]=="MODIFICAR"){
-            modificar(arrComando[1],arrComando[2],registro);
+            registro.modificar(arrComando[1],arrComando[2]);
         }
 
         if (arrComando[0]=="OBTENER"){
-            obtener(arrComando[1],registro);
+            registro.obtener(arrComando[1]);
         }        
 
         if (arrComando[0]=="ESTADISTICAS"){
-            estadisticas(registro);
+            registro.estadisticas();
         }
 
         delete[] arrComando;

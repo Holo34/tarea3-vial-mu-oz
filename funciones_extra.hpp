@@ -102,25 +102,4 @@ string* separar_string(const string frase, const char separador) {
     return ArregloReturn;
 }
 
-void agregar (string rol, string nombre, string descripcion, registro_cuentas& registro){
-    cuenta nueva_cuenta; nueva_cuenta.rol = rol; nueva_cuenta.nombre = nombre; nueva_cuenta.descripcion = descripcion;
-    registro.agregar(nueva_cuenta);
-}
-
-void quitar (string rol, registro_cuentas& registro){
-    registro.eliminar(rol);
-}
-
-void modificar (string rol, string descripcion, registro_cuentas& registro){
-    registro.modificar(rol, descripcion);
-}
-
-void obtener (string rol, registro_cuentas& registro){
-    registro.obtener(rol);
-}
-
-void estadisticas (registro_cuentas& registro){
-    registro.estadisticas();
-}
-
 #endif

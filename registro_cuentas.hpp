@@ -3,58 +3,88 @@
 #include <string>
 using namespace std;
 
-struct cuenta
-{
+struct cuenta{
     // El rol es el identificador de la persona.
     // El nombre y la descripcion son valores asociados al rol
     string rol, nombre, descripcion;
 };
-class registro_cuentas
-{
-private:
-    float factor_de_carga = 0.0;
-    cuenta *tabla;            // Aca se almacenaran los elementos de la tabla
-    int ranuras = 15;         // Cuantas ranuras tiene la tabla hash (inicialmente)
-    int hash(string rol);     // Se obtiene el hash dado el rol
-    int p(string rol, int i); // Se otiene la ranura a revisar en caso de colisión dado el rol y el intento i
-    int rOcupadas = 0;
-
-public:
-    registro_cuentas()
-    {
-        // Initialize the hash table with null pointers
-        tabla = new cuenta[ranuras];
-    }
-
-    ~registro_cuentas()
-    {
-        delete[] tabla; // Free the allocated memory
-    }
-    cuenta obtener(string rol);                     // Dado el rol, devuelve la cuenta con ese rol
-    void agregar(cuenta c);                         // Se agrega una cuenta a la tabla
-    void eliminar(string rol);                      // Se elimina la cuenta
-    void modificar(string rol, string descripcion); // Se modifica la descripcion del rol
-
-    void redimensionar(int n); // Se redimensiona la tabla a n espacios
-    void estadisticas();       // Debe mostrar las estadisticas
+class registro_cuentas{
+    private:
+        float factor_de_carga = 0.0;
+        cuenta *tabla;            // Aca se almacenaran los elementos de la tabla
+        int ranuras = 15;         // Cuantas ranuras tiene la tabla hash (inicialmente)
+        int hash(string rol);     // Se obtiene el hash dado el rol
+        int p(string rol, int i); // Se otiene la ranura a revisar en caso de colisión dado el rol y el intento i
+        int rOcupadas = 0;
+    public:
+        registro_cuentas(){
+            // Initialize the hash table with null pointers
+            tabla = new cuenta[ranuras];
+        }
+        ~registro_cuentas(){
+            delete[] tabla; // Free the allocated memory
+        }
+        cuenta obtener(string rol);                     // Dado el rol, devuelve la cuenta con ese rol
+        void agregar(cuenta c);                         // Se agrega una cuenta a la tabla
+        void eliminar(string rol);                      // Se elimina la cuenta
+        void modificar(string rol, string descripcion); // Se modifica la descripcion del rol
+        void redimensionar(int n); // Se redimensiona la tabla a n espacios
+        void estadisticas();       // Debe mostrar las estadisticas
 };
 // Definicion de metodos:*******************************************************************************
-int registro_cuentas::hash(string rol)
-{
+
+/*****
+* int registro_cuentas::hash(string rol)
+******
+* Resumen Función:
+* Calcula el hash dado un rol.
+******
+* Input:
+* string rol: El rol para el cual se calculará el hash.
+******
+* Returns:
+* int: El valor del hash calculado.
+*****/
+int registro_cuentas::hash(string rol){
     string rolNum = rol;
     rolNum.erase(8, 1);
     int hashOut = stoi(rolNum) % ranuras;
-
     return hashOut;
 }
-int registro_cuentas::p(string rol, int i)
-{
+
+
+/*****
+* int registro_cuentas::p(string rol, int i)
+******
+* Resumen Función:
+* Calcula la ranura a revisar en caso de colisión dado el rol y el intento i.
+******
+* Input:
+* string rol: El rol para el cual se calculará la ranura.
+* int i: El número de intento.
+******
+* Returns:
+* int: La ranura a revisar.
+*****/
+int registro_cuentas::p(string rol, int i){
     int pOut = (hash(rol) + i) % ranuras;
     return pOut;
 }
 
-cuenta registro_cuentas::obtener(string rol)
-{
+
+/*****
+* cuenta registro_cuentas::obtener(string rol)
+******
+* Resumen Función:
+* Dado el rol, devuelve la cuenta con ese rol.
+******
+* Input:
+* string rol: El rol de la cuenta a obtener.
+******
+* Returns:
+* cuenta: La cuenta con el rol especificado. Si no se encuentra, se devuelve una cuenta vacía.
+*****/
+cuenta registro_cuentas::obtener(string rol){
     cuenta vacia;
     vacia.nombre = "Cuenta no encontrada";
     vacia.rol = "Cuenta no encontrada";
@@ -62,9 +92,6 @@ cuenta registro_cuentas::obtener(string rol)
     int i = 0;
     while (tabla[p(rol, i)].rol != rol && i < 16)
     {
-
-        // cout<<"OBTAINING"<<endl;
-        // cout<<p(rol,i)<<endl;
         i++;
     }
     if (i < 16)
@@ -78,8 +105,20 @@ cuenta registro_cuentas::obtener(string rol)
     }
 }
 
-void registro_cuentas::agregar(cuenta c)
-{
+
+/*****
+* void registro_cuentas::agregar(cuenta c)
+******
+* Resumen Función:
+* Agrega una cuenta a la tabla.
+******
+* Input:
+* cuenta c: La cuenta a agregar.
+******
+* Returns:
+* void
+*****/
+void registro_cuentas::agregar(cuenta c){
     string rolStr = c.rol;
     int k = hash(c.rol);
     int i = 0;
@@ -101,8 +140,20 @@ void registro_cuentas::agregar(cuenta c)
     }
 }
 
-void registro_cuentas::eliminar(string rol)
-{
+
+/*****
+* void registro_cuentas::eliminar(string rol)
+******
+* Resumen Función:
+* Elimina la cuenta con el rol especificado.
+******
+* Input:
+* string rol: El rol de la cuenta a eliminar.
+******
+* Returns:
+* void
+*****/
+void registro_cuentas::eliminar(string rol){
     int i = 0;
     while (tabla[p(rol, i)].rol != rol && i < ranuras + 1)
     {
@@ -121,21 +172,43 @@ void registro_cuentas::eliminar(string rol)
     }
 }
 
-void registro_cuentas::modificar(string rol, string descripcion)
-{
+
+/*****
+* void registro_cuentas::modificar(string rol, string descripcion)
+******
+* Resumen Función:
+* Modifica la descripción del rol especificado.
+******
+* Input:
+* string rol: El rol de la cuenta a modificar.
+* string descripcion: La nueva descripción para el rol.
+******
+* Returns:
+* void
+*****/
+void registro_cuentas::modificar(string rol, string descripcion){
     int i = 0;
     while (tabla[p(rol, i)].rol != rol)
     {
-
-        // cout<<"OBTAINING"<<endl;
-        // cout<<p(rol,i)<<endl;
         i++;
     }
     tabla[p(rol, i)].descripcion = descripcion;
 }
 
-void registro_cuentas::estadisticas()
-{
+
+/*****
+* void registro_cuentas::estadisticas()
+******
+* Resumen Función:
+* Muestra las estadísticas de la tabla.
+******
+* Input:
+* None
+******
+* Returns:
+* void
+*****/
+void registro_cuentas::estadisticas(){
     std::cout.precision(4);
     cout << "RANURAS OCUPADAS: " << rOcupadas << endl;
     cout << "RANURAS TOTALES: " << ranuras << endl;
@@ -143,8 +216,20 @@ void registro_cuentas::estadisticas()
     cout << "FACTOR DE CARGA: " << factor_de_carga << endl;
 }
 
-void registro_cuentas::redimensionar(int n)
-{
+
+/*****
+* void registro_cuentas::redimensionar(int n)
+******
+* Resumen Función:
+* Redimensiona la tabla a n espacios.
+******
+* Input:
+* int n: El nuevo tamaño de la tabla.
+******
+* Returns:
+* void
+*****/
+void registro_cuentas::redimensionar(int n){
     cuenta *nueva_tabla = new cuenta[n];
     int old_ranuras = ranuras;
     ranuras = n;
